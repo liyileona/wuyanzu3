@@ -1,0 +1,67 @@
+# Copyright 2014 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+runtime: python27
+api_version: 1
+threadsafe: false
+
+handlers:
+
+# admin and cron handlers
+
+- url: /admin/.*
+  script: google.appengine.ext.admin.application
+  login: admin
+  secure: always
+
+- url: /tasks/.*
+  script: handlers.tasks.app
+  login: admin
+
+# backroom
+
+- url: /backroom/schedule
+  static_files: frontend/html/backroom_schedule.html
+  upload: frontend/html/backroom_schedule.html
+  login: admin
+
+- url: /backroom/.*
+  script: handlers.backroom.app
+  login: admin
+
+# static frontend assets
+
+- url: /frontend
+  static_dir: frontend
+
+- url: /favicon.ico
+  static_files: frontend/favicon.ico
+  upload: frontend/favicon.ico
+
+- url: /today
+  static_files: frontend/html/today.html
+  upload: frontend/html/today.html
+
+- url: /archive(/.*)?
+  static_files: frontend/html/archive.html
+  upload: frontend/html/archive.html
+
+- url: /
+  static_files: frontend/html/landing.html
+  upload: frontend/html/landing.html
+
+# other handlers
+
+- url: .*
+  script: handlers.main.app

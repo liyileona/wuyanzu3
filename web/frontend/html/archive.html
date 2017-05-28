@@ -1,0 +1,24 @@
+---
+title: Archive
+shareUrl: /archive
+webAppTitle: Muzei Archive
+description: An archive of featured photos from Muzei Live Wallpaper for Android.
+---
+{% extends '_base.html' %}
+
+{% block head %}
+<link href="/frontend/styles/archive.css" rel="stylesheet">
+{% endblock %}
+
+{% block scripts %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="/frontend/scripts/archive/archive.js"></script>
+{% endblock %}
+
+{% block body %}
+<div id="container">
+  <div class="month-carousel-container">
+    <div class="month-carousel"></div>
+  </div>
+</div>
+{% endblock %}

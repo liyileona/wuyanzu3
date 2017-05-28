@@ -1,0 +1,82 @@
+/**
+ * Copyright 2016 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+$loadingSpinnerRadius: 20px;
+$loadingSpinnerDelay: 2s;
+
+@function dashdeg($deg) {
+  @return $deg * 2 * $loadingSpinnerRadius * 3.14159265359 / 360;
+}
+
+@mixin loading-spinner($color, $diameter) {
+  $thickness: $diameter / 16;
+
+  width: $diameter;
+  height: $diameter;
+  box-sizing: border-box;
+  transform: translate(-50%, -50%) scale($diameter / 48px);
+  pointer-events: none;
+  animation: loading-spinner-rotate-#{$diameter} 5s linear $loadingSpinnerDelay infinite;
+  animation-fill-mode: backwards;
+
+  circle {
+    fill: none;
+    stroke: $color;
+    stroke-width: 4px;
+    stroke-dasharray: dashdeg(10), 1000;
+    transform-origin: 50% 50%;
+    animation:
+        loading-circle-dash 1.5s linear $loadingSpinnerDelay infinite,
+        loading-circle-rotate 1.5s linear $loadingSpinnerDelay infinite,
+        loading-circle-appear 3s ease $loadingSpinnerDelay;
+    animation-fill-mode: backwards;
+  }
+
+  @keyframes loading-circle-rotate {
+    from { transform: rotate(0); }
+    to { transform: rotate(100deg); }
+  }
+
+  @keyframes loading-spinner-rotate-#{$diameter} {
+    from { transform: translate(-50%, -50%) scale($diameter / 48px) rotate(-90deg); }
+    to { transform: translate(-50%, -50%) scale($diameter / 48px) rotate(270deg); }
+  }
+}
+
+@keyframes loading-circle-dash {
+  0% {
+    stroke-dasharray: 0, 0, dashdeg(10), 1000;
+    animation-timing-function: cubic-bezier(.5, 0, 0, 1);
+  }
+
+  50% {
+    stroke-dasharray: 0, 0, dashdeg(270), 1000;
+    animation-timing-function: cubic-bezier(.5, 0, 0, 1);
+  }
+
+  100% {
+    stroke-dasharray: 0, dashdeg(260), dashdeg(10), 1000;
+  }
+}
+
+@keyframes loading-circle-appear {
+  from { stroke-width: 0; }
+  to { stroke-width: 4px; }
+}
+
+.loading-spinner {
+  @include loading-spinner(#000, 48px);
+}

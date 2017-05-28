@@ -1,0 +1,76 @@
+{% extends '_base.html' %}
+
+{% block head %}
+<link href="/frontend/styles/landing.css" rel="stylesheet">
+{% endblock %}
+
+{% block scripts %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="/frontend/lib/modernizr.custom.14469.js"></script>
+<script src="/frontend/scripts/landing.js"></script>
+{% endblock %}
+
+{% block page-header %}
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <div class="logo">
+    <img class="logotype" src="/frontend/images/logotype.svg" alt="Muzei">
+    <img class="logotype-live-wallpaper" src="/frontend/images/logotype-live-wallpaper.svg" alt="Live Wallpaper">
+  </div>
+  <div class="tagline">
+    A living museum for your Android home screen.
+    <a class="tagline-story-link"
+      href="https://medium.com/@romannurik/serendipitous-ideas-3a1721a6f716#.g3wsj144h"
+      target="_blank">
+      Read the story
+    </a>
+  </div>
+
+  <a class="playlink" href="http://get.muzei.co">&nbsp;</a>
+
+  <div class="device-frame-container">
+    <div class="device-frame">
+      <div class="device-screen">
+        <div class="layer-sysui is-fullscreen"></div>
+        <div class="layer-wall-blurred is-fullscreen"></div>
+
+        <div class="device-scene scene-home">
+          <div class="layer-home is-fullscreen"></div>
+          <svg class="layer-openindicator-wave1 openindicatorwave" viewbox="0 0 100 100" width="100" height="100">
+            <circle cx="50" cy="50" r="45" fill="transparent" stroke="rgba(255,255,255,1)">
+          </svg>
+          <svg class="layer-openindicator-wave2 openindicatorwave" viewbox="0 0 100 100" width="100" height="100">
+            <circle cx="50" cy="50" r="45" fill="transparent" stroke="rgba(255,255,255,1)">
+          </svg>
+          <div class="layer-muzei-icon target-open-artdetail"></div>
+        </div>
+
+        <div class="device-scene scene-artdetail">
+          <div class="layer-wall is-fullscreen"></div>
+          <div class="layer-artdetail-topscrim"></div>
+          <div class="layer-artdetail">
+            <div class="artdetail-overflow"></div>
+            <div class="artdetail-title"></div>
+            <div class="artdetail-byline"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <div class="nav-section">
+      <div class="section-title">Featured art</div>
+      <a href="/today">Today</a>
+      <a href="/archive">Archive</a>
+    </div>
+    <div class="nav-section">
+      <div class="section-title">Developers</div>
+      <a href="http://api.muzei.co" class="is-external">API</a>
+      <a href="http://code.muzei.co" class="is-external">GitHub</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

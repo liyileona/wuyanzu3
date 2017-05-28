@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  {% set defaultDescription = 'Muzei Live Wallpaper for Android. A living museum for your Android home screen.' %}
+  <title>{% if title %}{{ title|safe }} - {% endif %}Muzei Live Wallpaper</title>
+  <meta name="description" content="{{description|default(defaultDescription)|safe}}">
+  <meta name="theme-color" content="#3c6caf">
+  <meta name="viewport" content="width=device-width">
+
+  <!-- Social sharing -->
+  <meta property="og:title" content="{% if title %}{{ title|safe }} - {% endif %}Muzei Live Wallpaper">
+  <meta property="og:site_name" content="Muzei Live Wallpaper">
+  <meta property="og:description" content="{{description|default(defaultDescription)|safe}}">
+  <meta property="og:image" content="http://muzei.co/frontend/images/social-thumb.jpg">
+  <meta property="og:url" content="http://muzei.co{{shareUrl|default('')}}">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{% if title %}{{ title|safe }} - {% endif %}Muzei Live Wallpaper">
+  <meta name="twitter:description" content="{{description|default(defaultDescription)|safe}}">
+  <meta name="twitter:image" content="http://muzei.co/frontend/images/social-thumb.jpg">
+
+  <!-- Add to homescreen for Chrome and Safari -->
+  {% set defaultWebAppTitle = 'Muzei' %}
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon" sizes="192x192" href="/frontend/chrome-touch-icon-192x192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="{{ webAppTitle|default(defaultWebAppTitle) }}">
+  <link rel="apple-touch-icon-precomposed" href="/frontend/apple-touch-icon-precomposed.png">
+
+  <!-- Styles -->
+  <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,900italic|Alegreya+Sans:300,400,500,700,900" rel="stylesheet">
+
+  {% block head %}
+  {% endblock %}
+</head>
+<body>
+
+{% block page-header %}
+<a class="page-header" href="/">
+  <svg class="page-header-back" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+    <path d="M18.12 4.12L10.24 12l7.88 7.88L16 22 6 12 16 2z"/>
+  </svg>
+  <img class="page-header-logotype" src="/frontend/images/logotype.svg">
+  <span class="page-header-title">{{title}}</span>
+</a>
+{% endblock %}
+
+{% block body %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-47842763-1', 'muzei.co');
+  ga('send', 'pageview');
+</script>
+
+</body>
+</html>

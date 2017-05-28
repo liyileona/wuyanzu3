@@ -1,0 +1,151 @@
+/*
+ * Copyright 2014 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+apply plugin: 'com.android.application'
+
+project.archivesBaseName = "muzei"
+
+repositories {
+    jcenter()
+}
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    def Properties versionProps = new Properties()
+    versionProps.load(new FileInputStream(file('../version.properties')))
+
+    dexOptions.preDexLibraries true
+
+    defaultConfig {
+        applicationId "net.nurik.roman.muzei"
+        minSdkVersion 19
+        targetSdkVersion rootProject.ext.targetSdkVersion
+
+        versionName versionProps['name']
+        versionCode versionProps['code'].toInteger()
+
+        buildConfigField "String", "DEVICE_TYPE", "\"android\""
+    }
+
+    signingConfigs {
+        release {
+            def Properties localProps = new Properties()
+            localProps.load(new FileInputStream(file('../local.properties')))
+            def Properties keyProps = new Properties()
+            if (localProps['keystore.props.file'] != null) {
+                keyProps.load(new FileInputStream(file(localProps['keystore.props.file'])))
+            }
+            storeFile keyProps["store"] != null ? file(keyProps["store"]) : null
+            keyAlias keyProps["alias"] ?: ""
+            storePassword keyProps["storePass"] ?: ""
+            keyPassword keyProps["pass"] ?: ""
+        }
+    }
+
+    productFlavors {
+        dev {
+            // dev utilizes minSDKVersion = 21 to allow the Android gradle plugin
+            // to pre-dex each module and produce an APK that can be tested on
+            // Android Lollipop without time consuming dex merging processes.
+            minSdkVersion 21
+            multiDexEnabled true
+            resConfigs "en"
+        }
+
+        prod {
+        }
+
+        wear2 {
+            wearAppUnbundled true
+            versionCode versionProps['codeAlpha'].toInteger()
+        }
+    }
+
+    buildTypes {
+        debug {
+            versionNameSuffix " Debug"
+        }
+
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), file('proguard-project.txt')
+            signingConfig signingConfigs.release
+        }
+
+        publicBeta.initWith(buildTypes.release)
+        publicBeta {
+            versionNameSuffix " " + versionProps['betaNumber']
+        }
+
+        publicDebug.initWith(buildTypes.publicBeta)
+        publicDebug {
+            debuggable true
+            renderscriptDebuggable true
+            versionNameSuffix " Debug " + versionProps['betaNumber']
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+}
+
+configurations {
+    prodReleaseWearApp
+    prodPublicBetaWearApp
+}
+dependencies {
+    compile "com.squareup.okhttp3:okhttp:$rootProject.ext.okhttpVersion"
+    compile "com.squareup.picasso:picasso:$rootProject.ext.picassoVersion"
+    compile "com.google.android.gms:play-services-wearable:$rootProject.ext.googlePlayServicesVersion"
+    compile "com.google.firebase:firebase-core:$rootProject.ext.googlePlayServicesVersion"
+    // Only use crash reporting in the "prod" product flavor
+    prodCompile "com.google.firebase:firebase-crash:$rootProject.ext.googlePlayServicesVersion"
+    compile "com.twofortyfouram:android-plugin-api-for-locale:1.0.2"
+    compile "org.greenrobot:eventbus:3.0.0"
+    compile "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
+    compile "com.android.support:recyclerview-v7:$rootProject.ext.supportLibraryVersion"
+    compile "com.android.support:design:$rootProject.ext.supportLibraryVersion"
+    compile "com.android.support:customtabs:$rootProject.ext.supportLibraryVersion"
+    compile "com.android.support:exifinterface:$rootProject.ext.supportLibraryVersion"
+    //add_div
+    compile 'org.aspectj:aspectjrt:1.8.9'
+
+    // :api is included as a transitive dependency from :android-client-common
+    // compile project(':api')
+    compile project(':android-client-common')
+    compile project(':source-featured-art')
+    compile project(':source-gallery')
+    prodReleaseWearApp project(path: ':wearable', configuration: 'prodRelease')
+    prodPublicBetaWearApp project(path: ':wearable', configuration: 'prodPublicBeta')
+}
+//add_div
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.uphyca.gradle:gradle-android-aspectj-plugin:0.9.+'
+        classpath 'org.aspectj:aspectjtools:1.8.+'
+    }
+}
+
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'android-aspectj'
